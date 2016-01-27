@@ -1,0 +1,119 @@
+#生成券商需要的转帐明细数据以及存管帐户资金域额文件
+REQ99901
+{
+    FunctionId          string(DB_TRSCDE_LEN)        #交易码
+    ExSerial            string(FLD_EXSERIAL_LEN)     #发起方流水号
+    bOrganId            string(FLD_BANKNO_LEN)       #银行编号
+    bBranchId           string(DB_BRANCH_LEN)        #机构编号
+    bTerminalId         string(DB_TERMNL_LEN)        #终端编号
+    bOpCode             string(DB_OPCODE_LEN)        #柜员编号
+    bAuthOpCode         string(DB_OPCODE_LEN)        #授权柜员
+    Date                long                         #交易日期
+    Time                long                         #交易时间
+    EntrustWay          string(1)                    #委托方式
+    sOrganId            string(DB_SECUNO_LEN)        #券商号
+    BusinType           string(1)                    #业务类别
+ }
+
+ANS99901
+{
+    FunctionId          string(DB_TRSCDE_LEN)        #交易码
+    ExSerial            string(FLD_EXSERIAL_LEN)     #发起方流水号
+    ErrorNo             string(DB_ERRNO_LEN)         #返回码
+    ErrorInfo           string(DB_ERRMSG_LEN)        #返回信息
+}
+
+
+#转帐明细
+TRDETAIL99901
+{
+   source_side         string(1)                     #发起方    0证券端,1银行端
+   trans_code          string(DB_TRSCDE_LEN)         #6位交易代码
+   trans_type          string(2)                     #2位交易码 01银行转证券,02    证券转银行
+   client_account      string(DB_BNKACC_LEN)         #银行帐号
+   secu_account        string(DB_SCUACC_LEN)         #资金帐号
+   occur_balance       double(17,3)                  #发生金额  N13.2
+   money_kind          string(1)                     #币种
+   serial_no           string(20)                    #存管流水
+   secu_serial         string(20)                    #证券流水
+   hs_date             long                          #交易日期
+   hs_time             long                          #交易时间
+   bank_kind           string(1)                     #银行类型
+   secu_no             string(DB_SECUNO_LEN)         #券商编号
+   secu_branch         string(DB_SBRNCH_LEN)         #券商营业部编号
+   reserved1           string(DB_RESERV_LEN)         #业务摘要(20081010-01存放业务类别)
+}
+
+#存管帐户余额明细
+BALDETAIL99901
+{
+   fund_account      long                            #内部客户号
+   client_account    string(DB_BNKACC_LEN)           #银行帐号
+   secu_account      string(DB_SCUACC_LEN)           #资金帐号
+   money_kind        string(1)                       #币种
+   occur_bala        double(17,3)                    #证券资金余额
+   uncomebuy         double(17,3)                    #未回买入资金
+   uncomesale        double(17,3)                    #未回卖出资金
+   frozen_bala       double(17,3)                    #冻结资金
+   hs_date           long                            #日期
+   busin_type        string(1)                       #业务类别 20081010-01新增
+}
+
+#存管帐户变动明细
+ACCDETAIL99901
+{
+   hs_date           long                            #交易日期
+   hs_time           long                            #交易时间
+   serial_no         long                            #顺序流水号
+   secu_serial       string(20)                      #证券流水
+   bank_id           string(1)                       #银行类型
+   client_account    string(DB_BNKACC_LEN)           #银行帐号
+   secu_use_account  string(DB_BNKACC_LEN)           #存管账号/银行结算账号
+   secu_no           string(DB_SECUNO_LEN)           #证券公司编号
+   secu_branch       string(DB_SBRNCH_LEN)           #营业部编码
+   secu_account      string(DB_SCUACC_LEN)           #资金帐号
+   client_name       string(DB_CUSNME_LEN)           #客户姓名              
+   id_kind           string(1)                       #证件种类              
+   id_code           string(DB_IDCODE_LEN)           #证件编号              
+   money_kind        string(1)                       #币种
+   occur_bala        double(17,3)                    #证券资金余额
+   status            string(1)                       #证件种类
+   trans_code        string(DB_TRSCDE_LEN)           #功能号
+   busin_type        string(1)                       #业务类别 20081010-01新增
+}
+
+#预约开户帐户明细
+PRECDETAIL99901
+{
+   serial_no         long                            #顺序流水号
+   bank_id           string(1)                       #银行类型
+   secu_use_account  string(DB_BNKACC_LEN)           #存管账号/银行结算账号
+   secu_no           string(DB_SECUNO_LEN)           #证券公司编号
+   secu_branch_b     string(DB_SBRNCH_LEN)           #指定营业部编码
+   secu_branch_s     string(DB_SBRNCH_LEN)           #券商激活营业部编码
+   secu_account      string(DB_SCUACC_LEN)           #资金帐号
+   client_name       string(DB_CUSNME_LEN)           #客户姓名              
+   id_kind           string(1)                       #证件种类              
+   id_code           string(DB_IDCODE_LEN)           #证件编号              
+   money_kind        string(1)                       #币种
+   status            string(1)                       #证件种类
+   busin_type        string(1)                       #业务类别
+}
+
+#客户帐户类型明细 20090720-01新增
+TYPEDETAIL99901
+{
+   serial_no         long                            #顺序流水号
+   bank_id           string(1)                       #银行类型
+   secu_use_account  string(DB_BNKACC_LEN)           #存管账号/银行结算账号
+   secu_no           string(DB_SECUNO_LEN)           #证券公司编号
+   secu_branch       string(DB_SBRNCH_LEN)           #营业部编码
+   secu_account      string(DB_SCUACC_LEN)           #资金帐号
+   client_account    string(DB_BNKACC_LEN)           #银行账号
+   client_name       string(DB_CUSNME_LEN)           #客户姓名              
+   id_kind           string(1)                       #证件种类              
+   id_code           string(DB_IDCODE_LEN)           #证件编号              
+   money_kind        string(1)                       #币种
+   acc_type          string(1)                       #帐户类别
+   busin_type        string(1)                       #业务类别
+}
